@@ -1,1 +1,1 @@
-include ':app', ':skinpeeler', ':blue_skin', ':yellow_skin'
+include ':app', ':skinpeeler', ':blue_skin', ':yellow_skin', ':memory', ':network', ':image'
