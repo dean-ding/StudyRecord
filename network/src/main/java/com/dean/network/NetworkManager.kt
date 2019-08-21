@@ -1,38 +1,21 @@
 package com.dean.network
 
-import android.app.Application
-import android.util.Log
+import java.lang.reflect.Method
 
 /**
  * Created: tvt on 2019-08-15 20:14
  */
-class NetworkManager {
+class NetworkManager(type: Class<*>, networkType: NetworkType, method: Method) {
 
-    companion object {
-        val instance: NetworkManager by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
-            NetworkManager()
-        }
-    }
+    var type: Class<*>
 
-    constructor() {
-        receiver = NetworkReceiver()
-    }
+    var networkType: NetworkType = NetworkType.AUTO
 
-    private var application: Application? = null
-    private var receiver: NetworkReceiver? = null
+    var method: Method
 
-    fun init(application: Application) {
-        this.application = application
-    }
-
-    fun setCallback(observer: NetworkObserver) {
-        this.receiver?.setCallback(observer)
-    }
-
-    fun getApplication(): Application? {
-        if (this.application == null) {
-            Log.e(javaClass.name, "application is null!")
-        }
-        return this.application
+    init {
+        this@NetworkManager.type = type
+        this@NetworkManager.networkType = networkType
+        this@NetworkManager.method = method
     }
 }

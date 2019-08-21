@@ -9,6 +9,5 @@ class NetworkApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        NetworkManager.instance.init(this)
     }
 }
