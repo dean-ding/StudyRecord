@@ -11,4 +11,6 @@ class Message {
     var what: Int = 0
 
     var next: Message? = null
+
+    var target: Handler? = null
 }
