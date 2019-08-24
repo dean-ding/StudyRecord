@@ -1,6 +1,7 @@
 package com.dean.handler
 
-import com.dean.handler.Message
+import java.util.concurrent.ArrayBlockingQueue
+import java.util.concurrent.BlockingQueue
 
 /**
  * Created: tvt on 2019-08-23 14:43
@@ -8,10 +9,16 @@ import com.dean.handler.Message
 class MessageQueue {
 
     private var mMessage: Message? = null
+    private var mQueue: BlockingQueue<Message>? = null
+
+    constructor() {
+        mQueue = ArrayBlockingQueue(50)
+    }
 
     fun enqueueMessage(msg: Message, time: Long) {
 
         var p = mMessage
+        msg.time = time
 
         if (p == null || p.time > msg.time) {
             msg.next = p
@@ -30,5 +37,13 @@ class MessageQueue {
         }
         prev?.next = msg
         msg.next = p
+    }
+
+    fun next(): Message? {
+        return mMessage
+    }
+
+    fun remove() {
+        mMessage = mMessage?.next
     }
 }

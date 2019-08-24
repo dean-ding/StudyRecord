@@ -1,53 +1,57 @@
 package com.dean.handler
 
-import android.os.Looper
 
 /**
  * Created: tvt on 2019-08-23 14:43
  */
-class Handler {
+abstract class Handler {
 
-    private lateinit var looper: Looper
-    private var queue: Message? = null
+    private var looper: Looper? = null
+    private var queue: MessageQueue? = null
 
-    constructor() {
-        looper = Looper.myLooper()
-    }
-
-    constructor(looper: Looper) {
-        this@Handler.looper = looper
+    init {
+        Looper.prepare()
+        this@Handler.looper = Looper.myLooper()
+        queue = looper?.queue
     }
 
     fun obtainMessage(): Message {
-        return Message()
+        val message = Message()
+        message.target = this
+        return message
     }
 
     fun sendMessage(message: Message) {
-        insertMessage(message)
+        insertMessage(message, System.currentTimeMillis())
     }
 
     fun sendMessageDelay(message: Message, delay: Long) {
-
+        insertMessage(message, delay + System.currentTimeMillis())
     }
 
     fun sendEmptyMessage(what: Int) {
-        val message = Message()
-        insertMessage(message)
+        val message = obtainMessage()
+        message.what = what
+        insertMessage(message, System.currentTimeMillis())
     }
 
     fun sendEmptyMessageDelay(what: Int, delay: Long) {
-
+        val message = obtainMessage()
+        message.what = what
+        insertMessage(message, delay + System.currentTimeMillis())
     }
 
     /**
      * 插入Message到queue中，通过时间进行排序
      */
-    private fun insertMessage(message: Message) {
-        if (queue == null) {
-            queue = message
-            return
-        }
-
+    private fun insertMessage(message: Message, time: Long) {
+        queue?.enqueueMessage(message, time)
     }
+
+    fun dispatchMessage(message: Message) {
+        handleMessage(message)
+    }
+
+    abstract fun handleMessage(message: Message)
 
 }
